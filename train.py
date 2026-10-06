@@ -82,8 +82,9 @@ def build_pipeline():
     #  - кусочки символов (char n-grams): хорошо работают для корейского и опечаток
     #  - слова и пары слов (word n-grams): ловят типичные фразы мошенников
     features = FeatureUnion([
-        ("chars", TfidfVectorizer(analyzer="char_wb", ngram_range=(2, 5), min_df=2, sublinear_tf=True)),
-        ("words", TfidfVectorizer(analyzer="word", ngram_range=(1, 2), token_pattern=r"(?u)\b\w+\b",
+        ("chars", TfidfVectorizer(analyzer="char_wb", ngram_range=(2, 5), min_df=2, sublinear_tf=True,
+                                  max_features=60000, dtype=np.float32)),
+        ("words", TfidfVectorizer(analyzer="word", ngram_range=(1, 2), token_pattern=r"(?u)\b\w+\b", max_features=20000, dtype=np.float32,
                                   sublinear_tf=True)),
     ])
     return Pipeline([
@@ -119,7 +120,8 @@ def main():
     weights = train["lang"].map(lambda l: min(5.0, lang_counts.max() / lang_counts[l]) if l != "en" else 1.0)
 
     # Подбираем силу регуляризации C перекрёстной проверкой
-    search = GridSearchCV(build_pipeline(), {"clf__C": [1, 4, 10, 30]}, scoring="f1", cv=4, n_jobs=-1)
+    search = GridSearchCV(build_pipeline(), {"clf__C": [1, 4, 10, 30]}, scoring="f1", cv=4, n_jobs=1)
+    # n_jobs=1: считаем по очереди, чтобы не превышать лимит памяти бесплатного сервера
     search.fit(train["text"], train["label"], clf__sample_weight=weights.values)
     model = search.best_estimator_
     print(f"\nЛучший параметр C = {search.best_params_['clf__C']}")
