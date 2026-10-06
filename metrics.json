@@ -1,0 +1,46 @@
+{
+  "overall": {
+    "n": 1048,
+    "accuracy": 0.99,
+    "precision": 0.977,
+    "recall": 0.949,
+    "f1": 0.963
+  },
+  "by_language": {
+    "en": {
+      "n": 1032,
+      "accuracy": 0.993,
+      "precision": 0.992,
+      "recall": 0.953,
+      "f1": 0.972
+    },
+    "kk": {
+      "n": 2,
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "ko": {
+      "n": 8,
+      "accuracy": 0.875,
+      "precision": 1.0,
+      "recall": 0.75,
+      "f1": 0.857
+    },
+    "ru": {
+      "n": 6,
+      "accuracy": 0.667,
+      "precision": 0.6,
+      "recall": 1.0,
+      "f1": 0.75
+    }
+  },
+  "train_size": 5238,
+  "languages": {
+    "en": 5158,
+    "ko": 40,
+    "ru": 30,
+    "kk": 10
+  }
+}
